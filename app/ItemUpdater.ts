@@ -18,7 +18,15 @@ export abstract class ItemUpdater {
     );
   }
 
-  constructor(public item: Item, protected sealed = false) {}
+  protected get sellIn(): number {
+    return this.item.sellIn;
+  }
+
+  protected get quality(): number {
+    return this.item.quality;
+  }
+
+  constructor(private item: Item, protected sealed = false) {}
 
   protected setQuality(value: number) {
     if (this.sealed) return;
@@ -52,7 +60,7 @@ export abstract class ItemUpdater {
 
 export class NormalUpdater extends ItemUpdater {
   updateQuality() {
-    if (this.item.sellIn < 0) {
+    if (this.sellIn < 0) {
       this.changeQuality(-2);
     } else {
       this.changeQuality(-1);
@@ -76,11 +84,11 @@ export class SulfurasUpdater extends ItemUpdater {
 
 export class BackstagePassesUpdater extends ItemUpdater {
   updateQuality() {
-    if (this.item.sellIn < 0) {
+    if (this.sellIn < 0) {
       this.setQuality(0);
-    } else if (this.item.sellIn < 6) {
+    } else if (this.sellIn < 6) {
       this.changeQuality(3);
-    } else if (this.item.sellIn < 11) {
+    } else if (this.sellIn < 11) {
       this.changeQuality(2);
     } else {
       this.changeQuality(1);
